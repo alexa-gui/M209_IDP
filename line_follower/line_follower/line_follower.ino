@@ -64,7 +64,7 @@ void loop() {
           break;
         case 6:
           while(1) {
-            Stop();
+            stop();
           }
           break;
         default:
@@ -76,21 +76,7 @@ void loop() {
   }
 }
 
-void forward() {  //forword
 
-  // leftMotor->setSpeed(150);
-  // rightMotor->setSpeed(150);
-  leftMotor->run(BACKWARD);
-  rightMotor->run(BACKWARD);
-}
-
-void adjRight() {  //turnRight
-
-  // leftMotor->setSpeed(50);
-  // rightMotor->setSpeed(50);
-  leftMotor->run(FORWARD);
-  rightMotor->run(BACKWARD);
-}
 
 void turnRight() {  //turnRight
 
@@ -104,14 +90,6 @@ void turnRight() {  //turnRight
       break;
     }
   }
-}
-
-void adjLeft() {  //turnLeft
-
-  // leftMotor->setSpeed(50);
-  // rightMotor->setSpeed(50);
-  leftMotor->run(BACKWARD);
-  rightMotor->run(FORWARD);
 }
 
 void turnLeft() {  //turnLeft
@@ -167,7 +145,7 @@ void exitBox() {
   bool exitLeft = 0;
   bool exitRight = 0;
   uint32_t startTime;
-  
+
   forward();
 
   while((exitLeft == 0)||(exitRight == 0)) {
@@ -186,7 +164,7 @@ void exitBox() {
       break;
     }
   }
-  Stop();
+  stop();
   sweep();
 }
 
@@ -197,11 +175,5 @@ void followLine() {
 
   if ((digitalRead(R1) == 0) && (digitalRead(L1) == 1)) { adjLeft(); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
 
-  if ((digitalRead(R1) == 1) && (digitalRead(L1) == 1)) { forward(); }  //if Right Sensor and Left Sensor are at white color then it will call Stop function
-}
-
-void Stop() {  //stop
-
-  leftMotor->run(RELEASE);
-  rightMotor->run(RELEASE);
+  if ((digitalRead(R1) == 1) && (digitalRead(L1) == 1)) { forward(); }  //if Right Sensor and Left Sensor are at white color then it will call stop function
 }
