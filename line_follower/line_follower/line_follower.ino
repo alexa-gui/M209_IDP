@@ -1,8 +1,11 @@
 // Arduino Line Follower Robot Code
 
-int L_S = 2;
-int R_S = 3;
+int L1 = 2;
+int R1 = 3;
+int L2 = 5;
+int R2 = 6;
 int button = 4;
+int turnCounter = 0;
 
 #include <Adafruit_MotorShield.h>
 
@@ -16,8 +19,8 @@ void setup() {
 
   Serial.begin(9600);  // set up Serial library at 9600 bps
 
-  pinMode(L_S, INPUT);
-  pinMode(R_S, INPUT);
+  pinMode(L1, INPUT);
+  pinMode(R1, INPUT);
   pinMode(button, INPUT);
 
   if (!AFMS.begin()) {  // create with the default frequency 1.6KHz
@@ -44,31 +47,33 @@ void setup() {
     }
   }
 
-  /*turnLeft();
-  while(1){
-    if(digitalRead(L_S) == 1){
-      break;
-    }
-  }*/
+  exitBox();
 }
-
+uint32_t hysteris_time=0;
 void loop() {
-  if (digitalRead(button) == HIGH) {
-    turnLeft();
-    while (1) {
-      if (digitalRead(L_S) == 1) {
-        break;
+  followLine();
+
+  if((digitalRead(L2) == 1)||(digitalRead(R2) == 1)) {
+    if(millis() - hysteris_time > 500){
+      switch(turnCounter){
+        case 0:
+          turnLeft();
+          break;
+        case 3:
+          hysteris_time = millis();
+          break;
+        case 6:
+          while(1) {
+            Stop();
+          }
+          break;
+        default:
+          turnRight();
+          break;
       }
+      turnCounter += 1;
     }
   }
-
-  if ((digitalRead(R_S) == 0) && (digitalRead(L_S) == 0)) { forward(); }  //if Right Sensor and Left Sensor are at black color then it will call forword function
-
-  if ((digitalRead(R_S) == 1) && (digitalRead(L_S) == 0)) { correctRight(); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
-
-  if ((digitalRead(R_S) == 0) && (digitalRead(L_S) == 1)) { correctLeft(); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
-
-  if ((digitalRead(R_S) == 1) && (digitalRead(L_S) == 1)) { forward(); }  //if Right Sensor and Left Sensor are at white color then it will call Stop function
 }
 
 void forward() {  //forword
@@ -79,7 +84,7 @@ void forward() {  //forword
   rightMotor->run(BACKWARD);
 }
 
-void correctRight() {  //turnRight
+void adjRight() {  //turnRight
 
   // leftMotor->setSpeed(50);
   // rightMotor->setSpeed(50);
@@ -91,11 +96,17 @@ void turnRight() {  //turnRight
 
   // leftMotor->setSpeed(50);
   // rightMotor->setSpeed(50);
-  leftMotor->run(RELEASE);
+  leftMotor->run(FORWARD);
   rightMotor->run(BACKWARD);
+
+  while (1) {
+    if(digitalRead(R1) == 1) {
+      break;
+    }
+  }
 }
 
-void correctLeft() {  //turnLeft
+void adjLeft() {  //turnLeft
 
   // leftMotor->setSpeed(50);
   // rightMotor->setSpeed(50);
@@ -108,7 +119,85 @@ void turnLeft() {  //turnLeft
   // leftMotor->setSpeed(50);
   // rightMotor->setSpeed(50);
   leftMotor->run(BACKWARD);
-  rightMotor->run(RELEASE);
+  rightMotor->run(FORWARD);
+
+  while (1) {
+    if(digitalRead(L1) == 1) {
+      break;
+    }
+  }
+}
+
+void sweep() {
+  uint32_t startTime;
+
+  leftMotor->setSpeed(150);
+  rightMotor->setSpeed(150);
+
+  while(1) {
+    adjLeft();
+    startTime = millis();
+    while((millis() - startTime) < 1000) {
+      if((digitalRead(L1) == 1)||(digitalRead(R1) == 1)) {
+        goto end_sweep;
+      }
+    }
+    adjRight();
+    startTime = millis();
+    while((millis() - startTime) < 2000) {
+      if((digitalRead(L1) == 1)||(digitalRead(R1) == 1)) {
+        goto end_sweep;
+      }
+    }
+    adjLeft();
+    startTime = millis();
+    while((millis() - startTime) < 1000) {
+      if((digitalRead(L1) == 1)||(digitalRead(R1) == 1)) {
+        goto end_sweep;
+      }
+    }
+  }
+  end_sweep:
+    leftMotor->setSpeed(255);
+    rightMotor->setSpeed(255);
+    return;
+}
+
+void exitBox() {
+  bool exitLeft = 0;
+  bool exitRight = 0;
+  uint32_t startTime;
+  
+  forward();
+
+  while((exitLeft == 0)||(exitRight == 0)) {
+    if(digitalRead(L2) == 1) {
+      exitLeft = 1;
+    }
+    if(digitalRead(R2) == 1) {
+      exitRight = 1;
+    }
+  }
+
+  delay(500);
+  startTime = millis();
+  while((millis() - startTime) < 500) {
+    if((digitalRead(L2) == 1)||(digitalRead(R2) == 1)) {
+      break;
+    }
+  }
+  Stop();
+  sweep();
+}
+
+void followLine() {
+  if ((digitalRead(R1) == 0) && (digitalRead(L1) == 0)) { forward(); }  //if Right Sensor and Left Sensor are at black color then it will call forword function
+
+  if ((digitalRead(R1) == 1) && (digitalRead(L1) == 0)) { adjRight(); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
+
+  if ((digitalRead(R1) == 0) && (digitalRead(L1) == 1)) { adjLeft(); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
+
+  if ((digitalRead(R1) == 1) && (digitalRead(L1) == 1)) { forward(); }  //if Right Sensor and Left Sensor are at white color then it will call Stop function
 }
 
 void Stop() {  //stop
