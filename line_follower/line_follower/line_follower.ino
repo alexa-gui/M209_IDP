@@ -49,31 +49,48 @@ void setup() {
 
   exitBox();
 }
-uint32_t hysteris_time=0;
 void loop() {
-  followLine();
+  // followLine();
 
-  if((digitalRead(L2) == 1)||(digitalRead(R2) == 1)) {
-    if(millis() - hysteris_time > 500){
-      switch(turnCounter){
-        case 0:
-          turnLeft();
-          break;
-        case 3:
-          hysteris_time = millis();
-          break;
-        case 6:
-          while(1) {
-            stop();
-          }
-          break;
-        default:
-          turnRight();
-          break;
-      }
-      turnCounter += 1;
-    }
-  }
+  // if((digitalRead(L2) == 1)||(digitalRead(R2) == 1)) {
+  //   if(millis() - hysteris_time > 500){
+  //     switch(turnCounter){
+  //       case 0:
+  //         turnLeft();
+  //         break;
+  //       case 3:
+  //         hysteris_time = millis();
+  //         break;
+  //       case 6:
+  //         while(1) {
+  //           stop();
+  //         }
+  //         break;
+  //       default:
+  //         turnRight();
+  //         break;
+  //     }
+  //     turnCounter += 1;
+  //   }
+  // }
+}
+
+uint32_t hysteris_time=0;
+#define INTERSECTION_DLY 1000
+bool is_intersection(){
+	if(millis() - hysteris_time <= INTERSECTION_DLY)
+		return false;
+	bool intersection_raw = (digitalRead(L2) || digitalRead(R2));
+	if (intersection_raw){
+		hysteris_time = millis();
+	}
+	return (digitalRead(L2) || digitalRead(R2));
+}
+
+void run_till_intersection(){
+	while(!is_intersection()){
+		followLine();
+	}
 }
 
 
