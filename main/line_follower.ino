@@ -1,21 +1,12 @@
-// Arduino Line Follower Robot Code
-
-int LED = 1;
-int L1 = 2;
-int R1 = 3;
-int L2 = 5;
-int R2 = 6;
-int button = 4;
-int turnCounter = 0;
-
 #include <Adafruit_MotorShield.h>
+#include "line_follower.h"
+#include "motor_control.h"
 
 extern Adafruit_DCMotor *leftMotor;
 extern Adafruit_DCMotor *rightMotor;
 
 uint32_t hysteris_time=0;
-#define INTERSECTION_DLY 1000
-
+#define INTERSECTION_DLY 2000
 bool is_intersection(){
 	if(millis() - hysteris_time <= INTERSECTION_DLY)
 		return false;
@@ -120,12 +111,24 @@ void exitBox() {
   sweep();
 }
 
+// void zigzag_follow(){
+//   if ((digitalRead(R1) == 0) && (digitalRead(L1) == 0)) { forward(); }  //if Right Sensor and Left Sensor are at black color then it will call forword function
+//
+//   if ((digitalRead(R1) == 1) && (digitalRead(L1) == 0)) { adjSlightRight(); delay(50); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
+//
+//   if ((digitalRead(R1) == 0) && (digitalRead(L1) == 1)) { adjSlightLeft(); delay(50); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
+//
+//   if ((digitalRead(R1) == 1) && (digitalRead(L1) == 1)) { forward(); }  //if Right Sensor and Left Sensor are at white color then it will call stop function
+// }
+
 void followLine() {
   if ((digitalRead(R1) == 0) && (digitalRead(L1) == 0)) { forward(); }  //if Right Sensor and Left Sensor are at black color then it will call forword function
 
-  if ((digitalRead(R1) == 1) && (digitalRead(L1) == 0)) { adjRight(); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
+  // if ((digitalRead(R1) == 1) && (digitalRead(L1) == 0)) { adjRight(); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
+  if ((digitalRead(R1) == 1) && (digitalRead(L1) == 0)) { adjSlightRight(); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
 
-  if ((digitalRead(R1) == 0) && (digitalRead(L1) == 1)) { adjLeft(); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
+  // if ((digitalRead(R1) == 0) && (digitalRead(L1) == 1)) { adjLeft(); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
+  if ((digitalRead(R1) == 0) && (digitalRead(L1) == 1)) { adjSlightLeft(); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
 
   if ((digitalRead(R1) == 1) && (digitalRead(L1) == 1)) { forward(); }  //if Right Sensor and Left Sensor are at white color then it will call stop function
 }

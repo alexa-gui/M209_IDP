@@ -7,16 +7,24 @@ void forward() {  //forword
 }
 
 void adjRight() {  //turnRight
-  leftMotor->run(FORWARD);
-  rightMotor->run(BACKWARD);
+  rightMotor->run(FORWARD);
+  leftMotor->run(BACKWARD);
 }
 
 void adjLeft() {  //turnLeft
-  leftMotor->run(BACKWARD);
-  rightMotor->run(FORWARD);
+  rightMotor->run(BACKWARD);
+  leftMotor->run(FORWARD);
 }
 
 void stop() {  //stop
   leftMotor->run(RELEASE);
   rightMotor->run(RELEASE);
+}
+void adjSlightRight(){
+	leftMotor->run(BACKWARD);
+	rightMotor->run(RELEASE);
+}
+void adjSlightLeft(){
+	rightMotor->run(BACKWARD);
+	leftMotor->run(RELEASE);
 }
