@@ -7,7 +7,7 @@ extern Adafruit_DCMotor *rightMotor;
 
 uint32_t hysteris_time=0;
 #define INTERSECTION_DLY 2000
-bool is_intersection(){
+bool isIntersection(){
 	if(millis() - hysteris_time <= INTERSECTION_DLY)
 		return false;
 	bool intersection_raw = (digitalRead(L2) || digitalRead(R2));
@@ -17,8 +17,8 @@ bool is_intersection(){
 	return (digitalRead(L2) || digitalRead(R2));
 }
 
-void run_till_intersection(){
-	while(!is_intersection()){
+void runTillIntersection(){
+	while(!isIntersection()){
 		followLine();
 	}
   digitalWrite(LED, HIGH);

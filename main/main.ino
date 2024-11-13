@@ -51,36 +51,36 @@ void setup() {
   }
 
   exitBox();
-  run_till_intersection();
+  runTillIntersection();
   turnLeft();
-  run_till_intersection();
-  
+  runTillIntersection();
+
 }
 
 void loop() {
   turnRight();
-  run_till_intersection();
-  run_till_intersection();
+  runTillIntersection();
+  runTillIntersection();
   turnRight();
-  run_till_intersection();
+  runTillIntersection();
   turnRight();
-  run_till_intersection();
-  run_till_intersection();
+  runTillIntersection();
+  runTillIntersection();
   turnLeft();
-  run_till_intersection();
+  runTillIntersection();
   turnLeft();
-  run_till_intersection();
+  runTillIntersection();
   turnLeft();
-  run_till_intersection();
-  run_till_intersection();
+  runTillIntersection();
+  runTillIntersection();
   turnLeft();
-  run_till_intersection();
-  run_till_intersection();
+  runTillIntersection();
+  runTillIntersection();
   turnLeft();
-  run_till_intersection();
+  runTillIntersection();
   turnRight();
-  run_till_intersection();
+  runTillIntersection();
   turnRight();
-  run_till_intersection();
-  run_till_intersection();
+  runTillIntersection();
+  runTillIntersection();
 }

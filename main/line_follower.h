@@ -3,9 +3,9 @@
 #include <Adafruit_MotorShield.h>
 
 void exitBox();
-void run_till_intersection();
+void runTillIntersection();
 void turnRight();
 void turnLeft();
-bool is_intersection();
+bool isIntersection();
 
 #endif
