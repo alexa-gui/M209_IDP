@@ -4,9 +4,13 @@
 extern Adafruit_DCMotor* leftMotor;
 extern Adafruit_DCMotor* rightMotor;
 void forward();
+void reverse();
 void adjRight();
 void adjLeft();
 void stop();
 void adjSlightRight();
 void adjSlightLeft();
+void adjSlightRightReverse();
+void adjSlightLeftReverse();
+#define LEFT_SLOW_RATIO(X) ((X * 96)/100)
 #endif

@@ -4,8 +4,12 @@
 
 void exitBox();
 void runTillIntersection();
+void runTillTimed(uint32_t time_ms);
 void turnRight();
 void turnLeft();
+void turnSlightRight();
+void turnSlightLeft();
 bool isIntersection();
+void backOutTillIntersection();
 
 #endif
