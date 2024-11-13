@@ -41,50 +41,34 @@ void setup() {
 
   exitBox();
   run_till_intersection();
-  turnRight();
-  digitalWrite(LED, LOW);
-  run_till_intersection();
   turnLeft();
-  digitalWrite(LED, LOW);
   run_till_intersection();
-  turnLeft();
-  digitalWrite(LED, LOW);
-  run_till_intersection();
-  digitalWrite(LED, LOW);
-  run_till_intersection();
-  turnLeft();
-  digitalWrite(LED, LOW);
-  run_till_intersection();
-  turnLeft();
-  digitalWrite(LED, LOW);
-  run_till_intersection();
-  turnRight();
-  digitalWrite(LED, LOW);
-  run_till_intersection();
-  digitalWrite(LED, LOW);
 }
-void loop() {
-  // followLine();
 
-  // if((digitalRead(L2) == 1)||(digitalRead(R2) == 1)) {
-  //   if(millis() - hysteris_time > 500){
-  //     switch(turnCounter){
-  //       case 0:
-  //         turnLeft();
-  //         break;
-  //       case 3:
-  //         hysteris_time = millis();
-  //         break;
-  //       case 6:
-  //         while(1) {
-  //           stop();
-  //         }
-  //         break;
-  //       default:
-  //         turnRight();
-  //         break;
-  //     }
-  //     turnCounter += 1;
-  //   }
-  // }
+void loop() {
+  turnRight();
+  run_till_intersection();
+  run_till_intersection();
+  turnRight();
+  run_till_intersection();
+  turnRight();
+  run_till_intersection();
+  run_till_intersection();
+  turnLeft();
+  run_till_intersection();
+  turnLeft();
+  run_till_intersection();
+  turnLeft();
+  run_till_intersection();
+  run_till_intersection();
+  turnLeft();
+  run_till_intersection();
+  run_till_intersection();
+  turnLeft();
+  run_till_intersection();
+  turnRight();
+  run_till_intersection();
+  turnRight();
+  run_till_intersection();
+  run_till_intersection();
 }

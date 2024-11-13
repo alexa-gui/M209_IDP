@@ -15,6 +15,7 @@ extern Adafruit_DCMotor *rightMotor;
 
 uint32_t hysteris_time=0;
 #define INTERSECTION_DLY 1000
+
 bool is_intersection(){
 	if(millis() - hysteris_time <= INTERSECTION_DLY)
 		return false;
