@@ -48,6 +48,7 @@ void setup() {
   }
 
   exitBox();
+  run_till_intersection();
 }
 void loop() {
   // followLine();
@@ -91,6 +92,7 @@ void run_till_intersection(){
 	while(!is_intersection()){
 		followLine();
 	}
+	stop();
 }
 
 
