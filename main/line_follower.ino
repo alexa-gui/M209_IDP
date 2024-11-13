@@ -27,10 +27,13 @@ void run_till_intersection(){
 }
 
 
+// TODO: adjust this value
+#define TURN_DLY 100
 
 void turnRight() {  //turnRight
 
 	adjRight();
+	delay(TURN_DLY);
   while (1) {
     if(digitalRead(R1) == 1) {
       break;
@@ -42,6 +45,7 @@ void turnLeft() {  //turnLeft
 
 	adjLeft();
 
+	delay(TURN_DLY);
   while (1) {
     if(digitalRead(L1) == 1) {
       break;
