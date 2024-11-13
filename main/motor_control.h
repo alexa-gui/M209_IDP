@@ -7,4 +7,6 @@ void forward();
 void adjRight();
 void adjLeft();
 void stop();
+void adjSlightRight();
+void adjSlightLeft();
 #endif

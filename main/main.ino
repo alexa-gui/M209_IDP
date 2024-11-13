@@ -1,10 +1,21 @@
 #include <Adafruit_MotorShield.h>
+#include "line_follower.h"
+
+// Arduino Line Follower Robot Code
+
+int LED = 1;
+int L1 = 2;
+int R1 = 3;
+int L2 = 5;
+int R2 = 6;
+int button = 4;
+int turnCounter = 0;
 
 // Create the motor shield object with the default I2C address
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
 
-Adafruit_DCMotor *leftMotor = AFMS.getMotor(2);
-Adafruit_DCMotor *rightMotor = AFMS.getMotor(1);
+Adafruit_DCMotor *leftMotor = AFMS.getMotor(1);
+Adafruit_DCMotor *rightMotor = AFMS.getMotor(2);
 
 void setup() {
 
@@ -41,27 +52,28 @@ void setup() {
 
   exitBox();
   run_till_intersection();
+
   turnRight();
-  digitalWrite(LED, LOW);
   run_till_intersection();
+
   turnLeft();
-  digitalWrite(LED, LOW);
   run_till_intersection();
+  run_till_intersection();
+
   turnLeft();
-  digitalWrite(LED, LOW);
   run_till_intersection();
-  digitalWrite(LED, LOW);
   run_till_intersection();
+  run_till_intersection();
+
   turnLeft();
-  digitalWrite(LED, LOW);
   run_till_intersection();
+  run_till_intersection();
+
   turnLeft();
-  digitalWrite(LED, LOW);
   run_till_intersection();
+
   turnRight();
-  digitalWrite(LED, LOW);
   run_till_intersection();
-  digitalWrite(LED, LOW);
 }
 void loop() {
   // followLine();
