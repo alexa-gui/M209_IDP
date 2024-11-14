@@ -12,5 +12,5 @@ void adjSlightRight();
 void adjSlightLeft();
 void adjSlightRightReverse();
 void adjSlightLeftReverse();
-#define LEFT_SLOW_RATIO(X) ((X * 96)/100)
+#define LEFT_SLOW_RATIO(X) ((X * 100)/100)
 #endif
