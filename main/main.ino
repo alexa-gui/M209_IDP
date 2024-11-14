@@ -87,45 +87,49 @@ void setup() {
   runTillIntersection();
   turnLeft();
   runTillIntersection();
-
-  turnRight();
-  runTillIntersection();
-  runTillIntersection();
-
-  turnRight();
-  runTillIntersection();
-  runTillIntersection();
-
-  turnRight();
-  runTillTimed(2000);
-  backOutTillIntersection();
-  stop();
 }
 
 void loop() {
-  // turnRight();
-  // runTillIntersection();
-  // runTillIntersection();
-  // turnRight();
-  // runTillIntersection();
-  // turnRight();
-  // runTillIntersection();
-  // runTillIntersection();
-  // turnLeft();
-  // runTillIntersection();
-  // turnLeft();
-  // runTillIntersection();
-  // turnLeft();
-  // runTillIntersection();
-  // runTillIntersection();
-  // turnLeft();
-  // runTillIntersection();
-  // runTillIntersection();
-  // turnLeft();
-  // runTillIntersection();
-  // turnRight();
-  // runTillIntersection();
-  // turnRight();
-  // runTillIntersection();
-  // runTillIntersection();
+  turnRight();
+  runTillIntersection();
+  runTillIntersection();
+
+  turnRight();
+  runTillIntersection();
+
+  turnRight();
+  runTillIntersection();
+  turnSlightRight();
+  runTillTimed(1400);
+  backOutTillIntersection();
+  turnLeft();
+  runTillIntersection();
+
+  turnLeft();
+  runTillIntersection();
+
+  turnLeft();
+  runTillIntersection();
+
+  turnLeft();
+  runTillIntersection();
+  turnSlightLeft();
+  runTillTimed(1400);
+  backOutTillIntersection();
+  turnRight();
+  runTillIntersection();
+
+  turnLeft();
+  runTillIntersection();
+  runTillIntersection();
+
+  turnLeft();
+  runTillIntersection();
+
+  turnRight();
+  runTillIntersection();
+
+  turnRight();
+  runTillIntersection();
+  runTillIntersection();
 }
