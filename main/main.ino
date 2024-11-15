@@ -13,6 +13,7 @@ int R1 = 3;
 int L2 = 5;
 int R2 = 6;
 int button = 4;
+int photo = 10;
 int turnCounter = 0;
 
 // Create the motor shield object with the default I2C address
@@ -53,12 +54,13 @@ void setup() {
   sensor.setMode(sensor.eContinuous,sensor.eHigh);
   sensor.start();
 
-  pinMode(LED, OUTPUT);
+ pinMode(LED, OUTPUT);
  pinMode(L1, INPUT);
  pinMode(R1, INPUT);
  pinMode(L2, INPUT);
  pinMode(R2, INPUT);
  pinMode(button, INPUT);
+ pinMode(photo, INPUT);
 
   if (!AFMS.begin()) {  // create with the default frequency 1.6KHz
                         // if (!AFMS.begin(1000)) {  // OR with a different frequency, say 1KHz
@@ -83,11 +85,14 @@ void setup() {
     }
   }
 
-  exitBox();
-  runTillIntersection();
-  turnLeft();
-  runTillIntersection();
+  leftMotor->setSpeed(255);
+  rightMotor->setSpeed(255);
 
+  runTillIntersection();
+  findBox();
+  faceBox();
+
+  /*
   turnRight();
   runTillIntersection();
   runTillIntersection();
@@ -100,6 +105,7 @@ void setup() {
   runTillTimed(2000);
   backOutTillIntersection();
   stop();
+  */
 }
 
 void loop() {

@@ -5,6 +5,7 @@
 
 extern Adafruit_DCMotor *leftMotor;
 extern Adafruit_DCMotor *rightMotor;
+extern int photo;
 
 uint32_t hysteris_time = 0;
 #define INTERSECTION_DLY 2000
@@ -44,6 +45,50 @@ void runTillEvent() {
 void backOutTillIntersection() {
   while (!isIntersection()) {
     reverse();
+  }
+  stop();
+}
+
+void findBox() {
+  leftMotor->setSpeed(255);
+  rightMotor->setSpeed(255);
+
+  Serial.println("wall section start");
+  while(!digitalRead(photo)) {
+    followLine();
+  }
+  Serial.println("wall section end");
+
+  leftMotor->setSpeed(150);
+  rightMotor->setSpeed(150);
+  // uint32_t startTime = millis();
+  // while(millis() - startTime < 2000) {
+  //   followLine();
+  // }
+
+  while(digitalRead(photo)) {
+    followLine();
+  }
+  Serial.println("box found");
+
+  uint32_t startTime = millis();
+  while(millis() - startTime < 1200) {
+    followLine();
+  }
+
+  stop();
+}
+
+void faceBox() {
+  leftMotor->setSpeed(255);
+  rightMotor->setSpeed(255);
+
+  while(!digitalRead(R2)) {
+    adjRight();
+  }
+  stop();
+  while(!digitalRead(L2)) {
+    adjSlightLeftReverse();
   }
   stop();
 }
@@ -172,6 +217,7 @@ void exitBox() {
 void followLine() {
   if (digitalRead(button))
     while (1) { stop(); }
+
   if ((digitalRead(R1) == 0) && (digitalRead(L1) == 0)) { forward(); }  //if Right Sensor and Left Sensor are at black color then it will call forword function
 
   // if ((digitalRead(R1) == 1) && (digitalRead(L1) == 0)) { adjRight(); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
