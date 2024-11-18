@@ -6,8 +6,7 @@
 extern int photo;
 
 void findBox() {
-  leftMotor->setSpeed(255);
-  rightMotor->setSpeed(255);
+	adjSpeed(255);
 
   Serial.println("wall section start");
   while(!digitalRead(photo)) {
@@ -15,8 +14,7 @@ void findBox() {
   }
   Serial.println("wall section end");
 
-  leftMotor->setSpeed(150);
-  rightMotor->setSpeed(150);
+  adjSpeed(150);
 
   while(digitalRead(photo)) {
     followLine();
@@ -32,8 +30,7 @@ void findBox() {
 }
 
 void faceBox() {
-  leftMotor->setSpeed(255);
-  rightMotor->setSpeed(255);
+	adjSpeed(255);
 
   while(!digitalRead(R2)) {
     adjRight();

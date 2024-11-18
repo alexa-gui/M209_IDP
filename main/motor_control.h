@@ -12,5 +12,7 @@ void adjSlightRight();
 void adjSlightLeft();
 void adjSlightRightReverse();
 void adjSlightLeftReverse();
+void adjSpeed(uint8_t speed);
 #define LEFT_SLOW_RATIO(X) ((X * 100)/100)
+#define RIGHT_SLOW_RATIO(X) ((X * 100)/100)
 #endif

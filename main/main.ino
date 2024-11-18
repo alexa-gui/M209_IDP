@@ -14,7 +14,7 @@ int R1 = 3;
 int L2 = 5;
 int R2 = 6;
 int button = 4;
-int photo = 10;
+int photo = 12;
 int turnCounter = 0;
 
 // Create the motor shield object with the default I2C address
@@ -71,8 +71,7 @@ void setup() {
   }
   Serial.println("Motor Shield found.");
   // Set the speed to start, from 0 (off) to 255 (max speed)
-  leftMotor->setSpeed(LEFT_SLOW_RATIO(255));
-  rightMotor->setSpeed(255);
+  adjSpeed(255);
   Serial.println("speed set");
   leftMotor->run(RELEASE);
   rightMotor->run(RELEASE);
@@ -86,8 +85,7 @@ void setup() {
     }
   }
 
-  leftMotor->setSpeed(255);
-  rightMotor->setSpeed(255);
+  adjSpeed(255);
 
   runTillIntersection();
   findBox();
