@@ -1,6 +1,7 @@
 #include <Adafruit_MotorShield.h>
 #include "line_follower.h"
 #include "motor_control.h"
+#include "box_finder.h"
 #include "Wire.h"
 #include "DFRobot_VL53L0X.h"
 
