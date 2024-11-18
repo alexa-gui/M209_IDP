@@ -49,7 +49,6 @@ void backOutTillIntersection() {
   stop();
 }
 
-
 // TODO: adjust this value
 #define TURN_DLY 100
 
@@ -101,8 +100,7 @@ void turnSlightLeft() {  //turnLeft
 void sweep() {
   uint32_t startTime;
 
-  leftMotor->setSpeed(LEFT_SLOW_RATIO(150));
-  rightMotor->setSpeed(150);
+  adjSpeed(150);
 
   while (1) {
     adjLeft();
@@ -128,8 +126,7 @@ void sweep() {
     }
   }
 end_sweep:
-  leftMotor->setSpeed(LEFT_SLOW_RATIO(255));
-  rightMotor->setSpeed(255);
+  adjSpeed(255);
   return;
 }
 
