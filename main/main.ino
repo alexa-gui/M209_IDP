@@ -91,8 +91,8 @@ void setup() {
   exitBox();
   runTillIntersection();
   turnLeft();
+  test_route();
 }
 
 void loop() {
-  test_route();
 }
