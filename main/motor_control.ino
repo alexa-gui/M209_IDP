@@ -55,6 +55,6 @@ void adjSlightLeftReverse(){
 }
 
 void adjSpeed(uint8_t speed){
-	rightMotor->setSpeed(RIGHT_SLOW_RATIO(speed)):
-	leftMotor->setSpeed(LEFT_SLOW_RATIO(speed)):
+	rightMotor->setSpeed(RIGHT_SLOW_RATIO(speed));
+	leftMotor->setSpeed(LEFT_SLOW_RATIO(speed));
 }

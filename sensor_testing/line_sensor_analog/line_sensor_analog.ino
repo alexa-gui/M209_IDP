@@ -1,4 +1,4 @@
-int line_sensor_pin = A0;
+int line_sensor_pin = A4;
 
 void setup(){
 	Serial.begin(9600);

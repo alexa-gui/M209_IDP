@@ -2,6 +2,7 @@
 #include "line_follower.h"
 #include "motor_control.h"
 #include "tof_sensor.h"
+#include "line_sensor_wrapper.h"
 
 extern Adafruit_DCMotor *leftMotor;
 extern Adafruit_DCMotor *rightMotor;
@@ -12,11 +13,11 @@ uint32_t hysteris_time = 0;
 bool isIntersection() {
   if (millis() - hysteris_time <= INTERSECTION_DLY)
     return false;
-  bool intersection_raw = (digitalRead(L2) || digitalRead(R2));
+  bool intersection_raw = (adcRead(L2) || adcRead(R2));
   if (intersection_raw) {
     hysteris_time = millis();
   }
-  return (digitalRead(L2) || digitalRead(R2));
+  return (adcRead(L2) || adcRead(R2));
 }
 
 void runTillTimed(uint32_t time_ms) {
@@ -29,7 +30,6 @@ void runTillIntersection() {
   while (!isIntersection()) {
     followLine();
   }
-  digitalWrite(LED, HIGH);
   stop();
   Serial.println("Detected Intersection");
 }
@@ -38,7 +38,6 @@ void runTillEvent() {
   while (!isIntersection() && (getDistanceReading() == GROUND)) {
     followLine();
   }
-  digitalWrite(LED, HIGH);
   stop();
   Serial.println("Detected Intersection");
 }
@@ -57,7 +56,7 @@ void turnRight() {  //turnRight
   adjRight();
   delay(TURN_DLY);
   while (1) {
-    if (digitalRead(R1) == 1) {
+    if (adcRead(R1) == 1) {
       break;
     }
   }
@@ -69,7 +68,7 @@ void turnLeft() {  //turnLeft
 
   delay(TURN_DLY);
   while (1) {
-    if (digitalRead(L1) == 1) {
+    if (adcRead(L1) == 1) {
       break;
     }
   }
@@ -79,7 +78,7 @@ void turnSlightRight() {  //turnRight
   adjSlightRight();
   delay(TURN_DLY);
   while (1) {
-    if (digitalRead(R1) == 1) {
+    if (adcRead(R1) == 1) {
       break;
     }
   }
@@ -91,7 +90,7 @@ void turnSlightLeft() {  //turnLeft
 
   delay(TURN_DLY);
   while (1) {
-    if (digitalRead(L1) == 1) {
+    if (adcRead(L1) == 1) {
       break;
     }
   }
@@ -106,21 +105,21 @@ void sweep() {
     adjLeft();
     startTime = millis();
     while ((millis() - startTime) < 1000) {
-      if ((digitalRead(L1) == 1) || (digitalRead(R1) == 1)) {
+      if ((adcRead(L1) == 1) || (adcRead(R1) == 1)) {
         goto end_sweep;
       }
     }
     adjRight();
     startTime = millis();
     while ((millis() - startTime) < 2000) {
-      if ((digitalRead(L1) == 1) || (digitalRead(R1) == 1)) {
+      if ((adcRead(L1) == 1) || (adcRead(R1) == 1)) {
         goto end_sweep;
       }
     }
     adjLeft();
     startTime = millis();
     while ((millis() - startTime) < 1000) {
-      if ((digitalRead(L1) == 1) || (digitalRead(R1) == 1)) {
+      if ((adcRead(L1) == 1) || (adcRead(R1) == 1)) {
         goto end_sweep;
       }
     }
@@ -138,10 +137,10 @@ void exitBox() {
   forward();
 
   while ((exitLeft == 0) || (exitRight == 0)) {
-    if (digitalRead(L2) == 1) {
+    if (adcRead(L2) == 1) {
       exitLeft = 1;
     }
-    if (digitalRead(R2) == 1) {
+    if (adcRead(R2) == 1) {
       exitRight = 1;
     }
   }
@@ -149,7 +148,7 @@ void exitBox() {
   delay(500);
   startTime = millis();
   while ((millis() - startTime) < 500) {
-    if ((digitalRead(L2) == 1) || (digitalRead(R2) == 1)) {
+    if ((adcRead(L2) == 1) || (adcRead(R2) == 1)) {
       break;
     }
   }
@@ -157,41 +156,17 @@ void exitBox() {
   sweep();
 }
 
-// void zigzag_follow(){
-//   if ((digitalRead(R1) == 0) && (digitalRead(L1) == 0)) { forward(); }  //if Right Sensor and Left Sensor are at black color then it will call forword function
-//
-//   if ((digitalRead(R1) == 1) && (digitalRead(L1) == 0)) { adjSlightRight(); delay(50); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
-//
-//   if ((digitalRead(R1) == 0) && (digitalRead(L1) == 1)) { adjSlightLeft(); delay(50); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
-//
-//   if ((digitalRead(R1) == 1) && (digitalRead(L1) == 1)) { forward(); }  //if Right Sensor and Left Sensor are at white color then it will call stop function
-// }
-
 void followLine() {
   if (digitalRead(button))
     while (1) { stop(); }
 
-  if ((digitalRead(R1) == 0) && (digitalRead(L1) == 0)) { forward(); }  //if Right Sensor and Left Sensor are at black color then it will call forword function
+  if ((adcRead(R1) == 0) && (adcRead(L1) == 0)) { forward(); }  //if Right Sensor and Left Sensor are at black color then it will call forword function
 
   // if ((digitalRead(R1) == 1) && (digitalRead(L1) == 0)) { adjRight(); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
-  if ((digitalRead(R1) == 1) && (digitalRead(L1) == 0)) { adjSlightRight(); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
+  if ((adcRead(R1) == 1) && (adcRead(L1) == 0)) { adjSlightRight(); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
 
   // if ((digitalRead(R1) == 0) && (digitalRead(L1) == 1)) { adjLeft(); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
-  if ((digitalRead(R1) == 0) && (digitalRead(L1) == 1)) { adjSlightLeft(); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
+  if ((adcRead(R1) == 0) && (adcRead(L1) == 1)) { adjSlightLeft(); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
 
-  if ((digitalRead(R1) == 1) && (digitalRead(L1) == 1)) { forward(); }  //if Right Sensor and Left Sensor are at white color then it will call stop function
+  if ((adcRead(R1) == 1) && (adcRead(L1) == 1)) { forward(); }  //if Right Sensor and Left Sensor are at white color then it will call stop function
 }
-
-// void followLineReverse() {
-//   if (digitalRead(button))
-//     while (1) { stop(); }
-//   if ((digitalRead(R1) == 0) && (digitalRead(L1) == 0)) { reverse(); }  //if Right Sensor and Left Sensor are at black color then it will call forword function
-//
-//   // if ((digitalRead(R1) == 1) && (digitalRead(L1) == 0)) { adjRight(); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
-//   if ((digitalRead(R1) == 1) && (digitalRead(L1) == 0)) { adjSlightLeftReverse(); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
-//
-//   // if ((digitalRead(R1) == 0) && (digitalRead(L1) == 1)) { adjLeft(); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
-//   if ((digitalRead(R1) == 0) && (digitalRead(L1) == 1)) { adjSlightRightReverse(); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
-//
-//   if ((digitalRead(R1) == 1) && (digitalRead(L1) == 1)) { reverse(); }  //if Right Sensor and Left Sensor are at white color then it will call stop function
-// }
