@@ -2,6 +2,7 @@
 #include "line_follower.h"
 #include "motor_control.h"
 #include "box_finder.h"
+#include "paths.h"
 #include "Wire.h"
 #include "DFRobot_VL53L0X.h"
 
@@ -77,10 +78,10 @@ void setup() {
   leftMotor->run(RELEASE);
   rightMotor->run(RELEASE);
 
-  Serial.println("entering while loop");
+  Serial.println("setup hold");
   while (1) {
     if (digitalRead(button) == HIGH) {
-      Serial.println("setup loop exit");
+      Serial.println("setup exit");
       delay(1000);
       break;
     }
@@ -89,67 +90,11 @@ void setup() {
   leftMotor->setSpeed(255);
   rightMotor->setSpeed(255);
 
+  exitBox();
   runTillIntersection();
-  findBox();
-  faceBox();
-
-  /*
-  turnRight();
-  runTillIntersection();
-  runTillIntersection();
-
-  turnRight();
-  runTillIntersection();
-  runTillIntersection();
-
-  turnRight();
-  runTillTimed(2000);
-  backOutTillIntersection();
-  stop();
-  */
+  turnLeft();
 }
 
 void loop() {
-  turnRight();
-  runTillIntersection();
-  runTillIntersection();
-
-  turnRight();
-  runTillIntersection();
-
-  turnRight();
-  runTillIntersection();
-  turnSlightRight();
-  runTillTimed(1400);
-  backOutTillIntersection();
-  turnLeft();
-  runTillIntersection();
-
-  turnLeft();
-  runTillIntersection();
-
-  turnLeft();
-  runTillIntersection();
-
-  turnLeft();
-  runTillIntersection();
-  turnSlightLeft();
-  runTillTimed(1400);
-  backOutTillIntersection();
-  turnRight();
-  runTillIntersection();
-
-  turnLeft();
-  runTillIntersection();
-  runTillIntersection();
-
-  turnLeft();
-  runTillIntersection();
-
-  turnRight();
-  runTillIntersection();
-
-  turnRight();
-  runTillIntersection();
-  runTillIntersection();
+  test_route();
 }
