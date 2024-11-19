@@ -9,13 +9,13 @@
 DFRobot_VL53L0X sensor;
 // Arduino Line Follower Robot Code
 
-int LED = 9;
-int L1 = 2;
-int R1 = 3;
-int L2 = 5;
-int R2 = 6;
-int button = 4;
-int photo = 12;
+int BlueLED = 4;
+int L1 = A0;
+int R1 = A1;
+int L2 = A2;
+int R2 = A3;
+int button = 2;
+int photo = 6;
 int turnCounter = 0;
 
 // Create the motor shield object with the default I2C address
@@ -25,13 +25,13 @@ Adafruit_DCMotor *leftMotor = AFMS.getMotor(1);
 Adafruit_DCMotor *rightMotor = AFMS.getMotor(2);
 
 extern bool is_moving;
-ISR(TIMER1_COMPA_vect){//timer1 interrupt 1Hz toggles pin 13 (LED)
+ISR(TIMER1_COMPA_vect){//timer1 interrupt 1Hz toggles pin 13 (BlueLED)
 	static bool toggle = false;
 	if(!is_moving){
-		digitalWrite(LED,0);
+		digitalWrite(BlueLED,0);
 		return;
 	}
-	digitalWrite(LED,!toggle);
+	digitalWrite(BlueLED,!toggle);
 	toggle = !toggle;
 }
 
@@ -56,7 +56,7 @@ void setup() {
   sensor.setMode(sensor.eContinuous,sensor.eHigh);
   sensor.start();
 
- pinMode(LED, OUTPUT);
+ pinMode(BlueLED, OUTPUT);
  pinMode(L1, INPUT);
  pinMode(R1, INPUT);
  pinMode(L2, INPUT);
@@ -91,6 +91,7 @@ void setup() {
   exitBox();
   runTillIntersection();
   turnLeft();
+  test_route();
 }
 
 void loop() {
