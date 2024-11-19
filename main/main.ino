@@ -94,5 +94,5 @@ void setup() {
 }
 
 void loop() {
-  test_route();
+  testGoToCenter();
 }

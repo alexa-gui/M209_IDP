@@ -1,6 +1,8 @@
 #ifndef PATHS_H
 #define PATHS_H
 
-void test_route();
+void testRoute();
+void goToCenter();
+void testGoToCenter();
 
 #endif
