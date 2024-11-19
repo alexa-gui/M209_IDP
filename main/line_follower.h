@@ -2,6 +2,8 @@
 #define LINE_FOLLOWER_H
 #include <Adafruit_MotorShield.h>
 
+#define TURN_DLY 250
+
 void exitBox();
 void sweep();
 void runTillIntersection();

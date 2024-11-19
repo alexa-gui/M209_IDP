@@ -1,5 +1,7 @@
 #include "line_follower.h"
 
+extern int LED_YEL;
+
 void testRoute() {
   /*
   setup routine:
@@ -51,6 +53,75 @@ void testRoute() {
   }
 }
 
+void competitionRoute() {
+  //Box 1
+  exitBox();
+  runTillEvent();
+  digitalWrite(LED_YEL, HIGH);
+  runTillIntersection();
+  turnLeft();
+  runTillIntersection();
+  turnRight();
+  runTillIntersection();
+  runTillIntersection();
+  turnRight();
+  runTillIntersection();
+  turnRight();
+  goToCenter(1);
+  
+  //Box 2
+  runTillIntersection();
+  runTillEvent();
+  digitalWrite(LED_YEL, HIGH);
+  turnLeft();
+  delay(500);
+  turnLeft();
+  runTillIntersection();
+  runTillIntersection();
+  turnLeft();
+  delay(500);
+  turnLeft();
+  goToCenter(0);
+
+  //Box 3
+  runTillIntersection();
+  runTillIntersection();
+  turnLeft();
+  runTillEvent();
+  digitalWrite(LED_YEL, HIGH);
+  runTillIntersection();
+  turnLeft();
+  runTillIntersection();
+  turnLeft();
+  runTillIntersection();
+  runTillIntersection();
+  turnLeft();
+  goToCenter(1);
+
+  //Box 4
+  runTillIntersection();
+  runTillIntersection();
+  turnLeft();
+  runTillIntersection();
+  turnRight();
+  runTillIntersection();
+  turnRight();
+  runTillEvent();
+  digitalWrite(LED_YEL, HIGH);
+  turnLeft();
+  runTillIntersection();
+  turnLeft();
+  runTillIntersection();
+  runTillIntersection();
+  turnLeft();
+  runTillIntersection();
+  runTillIntersection();
+  turnLeft();
+  goToCenter(0);
+
+  stop();
+}
+
 void goToCenter(bool is_magnetic) {
   /*
   Starts and ends at top T-junction between centers, facing away from the wall
@@ -60,24 +131,29 @@ void goToCenter(bool is_magnetic) {
     runTillIntersection();
     turnSlightRight();
     runTillTimed(1400);
+    digitalWrite(LED_YEL, LOW);
     backOutTillIntersection();
     turnRight();
     runTillIntersection();
     turnLeft();
+    delay(500);
     turnLeft();
+    backOutTillIntersection();
   }
   else {
-    turnLeft();
+    turnSlightLeft();
     runTillIntersection();
     turnSlightRight();
     runTillTimed(1400);
+    digitalWrite(LED_YEL, LOW);
     backOutTillIntersection();
-    turnRight();
+    turnSlightRight();
     runTillIntersection();
     turnLeft();
 
   }
-
+  stop();
+  delay(2000);
 }
 
 void testGoToCenter() {

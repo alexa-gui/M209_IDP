@@ -7,6 +7,7 @@
 extern Adafruit_DCMotor *leftMotor;
 extern Adafruit_DCMotor *rightMotor;
 extern int photo;
+extern int LED_YEL;
 
 uint32_t hysteris_time = 0;
 #define INTERSECTION_DLY 2000
@@ -26,12 +27,16 @@ void runTillTimed(uint32_t time_ms) {
     followLine();
   stop();
 }
+
 void runTillIntersection() {
   while (!isIntersection()) {
     followLine();
   }
   stop();
   Serial.println("Detected Intersection");
+  // digitalWrite(LED_YEL, 1);
+  // delay(500);
+  // digitalWrite(LED_YEL, 0);
 }
 
 void runTillEvent() {
@@ -46,10 +51,20 @@ void backOutTillIntersection() {
     reverse();
   }
   stop();
+
+  if(digitalRead(L2)&&digitalRead(R2))
+    return;
+  if(digitalRead(L2)&&!digitalRead(R2)){
+    while(!digitalRead(R2))
+      adjSlightRightReverse();
+  }
+    if(!digitalRead(L2)&&digitalRead(R2)){
+    while(!digitalRead(L2))
+      adjSlightLeftReverse();
+  }
+  stop();
 }
 
-// TODO: adjust this value
-#define TURN_DLY 100
 
 void turnRight() {  //turnRight
 
