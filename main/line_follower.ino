@@ -43,10 +43,13 @@ void runTillIntersection() {
 
 bool runTillIntersectionOrBox() {
   while(getDistanceReading()==GROUND){
-    if(isIntersection())
-      return false;
+    if(isIntersection()){
+		stop();
+		return false;
+	}
     followLine();
   }
+  stop();
   return true;
 }
 
