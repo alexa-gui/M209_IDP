@@ -15,8 +15,10 @@ bool isIntersection() {
   if (millis() - hysteris_time <= INTERSECTION_DLY)
     return false;
   bool intersection_raw = (adcRead(L2) || adcRead(R2));
+  //digitalWrite(LED_YEL, LOW);
   if (intersection_raw) {
     hysteris_time = millis();
+    //digitalWrite(LED_YEL, HIGH);
   }
   return (adcRead(L2) || adcRead(R2));
 }
@@ -39,39 +41,60 @@ void runTillIntersection() {
   // digitalWrite(LED_YEL, 0);
 }
 
+bool runTillIntersectionOrBox() {
+  while(getDistanceReading()==GROUND){
+    if(isIntersection())
+      return false;
+    followLine();
+  }
+  return true;
+}
+
 void runTillEvent() {
   while (!isIntersection() && (getDistanceReading() == GROUND)) {
     followLine();
   }
   stop();
-  Serial.println("Detected Intersection");
+  Serial.println("Detected Intersection or Box");
 }
+
 void backOutTillIntersection() {
   while (!isIntersection()) {
     reverse();
   }
   stop();
 
-  if(digitalRead(L2)&&digitalRead(R2))
+  if(adcRead(L2)&&adcRead(R2))
     return;
-  if(digitalRead(L2)&&!digitalRead(R2)){
-    while(!digitalRead(R2))
+  if(adcRead(L2)&&!adcRead(R2)){
+    while(!adcRead(R2))
       adjSlightRightReverse();
   }
-    if(!digitalRead(L2)&&digitalRead(R2)){
-    while(!digitalRead(L2))
+    if(!adcRead(L2)&&adcRead(R2)){
+    while(!adcRead(L2))
       adjSlightLeftReverse();
   }
   stop();
+  //hysteris_time = millis();
 }
 
+void turn180() {
+  while(digitalRead(R2) == 0) {
+    adjLeft();
+  }
+  while(digitalRead(L2) == 0) {
+    adjSlightLeftReverse();
+  }
+  turnLeft();
+}
 
 void turnRight() {  //turnRight
 
   adjRight();
   delay(TURN_DLY);
   while (1) {
-    if (adcRead(R1) == 1) {
+    // if (adcRead(R1) == 1) {
+    if (risingEdgeRead(R1) == 1) {
       break;
     }
   }
@@ -83,7 +106,8 @@ void turnLeft() {  //turnLeft
 
   delay(TURN_DLY);
   while (1) {
-    if (adcRead(L1) == 1) {
+    // if (adcRead(L1) == 1) {
+    if (risingEdgeRead(L1) == 1) {
       break;
     }
   }
@@ -93,7 +117,8 @@ void turnSlightRight() {  //turnRight
   adjSlightRight();
   delay(TURN_DLY);
   while (1) {
-    if (adcRead(R1) == 1) {
+    // if (adcRead(R1) == 1) {
+    if (risingEdgeRead(R1) == 1) {
       break;
     }
   }
@@ -105,7 +130,8 @@ void turnSlightLeft() {  //turnLeft
 
   delay(TURN_DLY);
   while (1) {
-    if (adcRead(L1) == 1) {
+    // if (adcRead(L1) == 1) {
+    if (risingEdgeRead(L1) == 1) {
       break;
     }
   }

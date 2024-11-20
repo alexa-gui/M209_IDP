@@ -56,9 +56,13 @@ void testRoute() {
 void competitionRoute() {
   //Box 1
   exitBox();
-  runTillEvent();
+  bool box1_failed = false;
+  if(!runTillIntersectionOrBox()){
+    box1_failed = true;
+  }else{
+    runTillIntersection();
+  }
   digitalWrite(LED_YEL, HIGH);
-  runTillIntersection();
   turnLeft();
   runTillIntersection();
   turnRight();
@@ -67,35 +71,49 @@ void competitionRoute() {
   turnRight();
   runTillIntersection();
   turnRight();
+  // adjSpeed(100);
+  if(!box1_failed){
   goToCenter(1);
+  }
+  // adjSpeed(255);
   
   //Box 2
   runTillIntersection();
-  runTillEvent();
+  if(!runTillIntersectionOrBox()){
+    goto box3_path;
+  }
   digitalWrite(LED_YEL, HIGH);
-  turnLeft();
-  delay(500);
-  turnLeft();
+  //runTillIntersection();
+  // turnLeft();
+  // delay(500);
+  turn180();
   runTillIntersection();
   runTillIntersection();
   turnLeft();
   delay(500);
   turnLeft();
+  backOutTillIntersection();
   goToCenter(0);
 
   //Box 3
   runTillIntersection();
   runTillIntersection();
+  box3_path:
   turnLeft();
-  runTillEvent();
+  if(!runTillIntersectionOrBox()){
+    goto box4_path;
+  }
   digitalWrite(LED_YEL, HIGH);
+  
+  turn180();
+  runTillIntersection();
+  turnRight();
+  runTillIntersection();
   runTillIntersection();
   turnLeft();
-  runTillIntersection();
+  delay(500);
   turnLeft();
-  runTillIntersection();
-  runTillIntersection();
-  turnLeft();
+  backOutTillIntersection();
   goToCenter(1);
 
   //Box 4
@@ -103,24 +121,46 @@ void competitionRoute() {
   runTillIntersection();
   turnLeft();
   runTillIntersection();
+box4_path:
   turnRight();
   runTillIntersection();
   turnRight();
-  runTillEvent();
+  if(!runTillIntersectionWithBox()){
+    goto home_path;
+  }
   digitalWrite(LED_YEL, HIGH);
-  turnLeft();
+  turn180();
   runTillIntersection();
   turnLeft();
   runTillIntersection();
-  runTillIntersection();
   turnLeft();
   runTillIntersection();
+  turnRight();
+  runTillIntersection();
   runTillIntersection();
   turnLeft();
+  delay(500);
+  turnLeft();
+  backOutTillIntersection();
   goToCenter(0);
 
+  // return to start
+  runTillIntersection();
+  runTillIntersection();
+  turnLeft();
+  runTillIntersection();
+  turnRight();
+  runTillIntersection();
+  turnRight();
+  home_path:
+  runTillIntersection();
+  turnLeft();
+  runTillIntersection();
+  runTillTimed(1000);
   stop();
 }
+
+extern uint32_t hysteris_time;
 
 void goToCenter(bool is_magnetic) {
   /*
@@ -154,18 +194,10 @@ void goToCenter(bool is_magnetic) {
   }
   stop();
   delay(2000);
+  hysteris_time = millis();
 }
 
 void testGoToCenter() {
-  runTillIntersection();
-  turnRight();
-
-  runTillIntersection();
-  runTillIntersection();
-  turnRight();
-
-  runTillIntersection();
-  turnRight();
   goToCenter(1);
   goToCenter(0);
 }

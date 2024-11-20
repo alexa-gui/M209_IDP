@@ -2,7 +2,7 @@
 #define LINE_FOLLOWER_H
 #include <Adafruit_MotorShield.h>
 
-#define TURN_DLY 250
+#define TURN_DLY 100
 
 void exitBox();
 void sweep();
