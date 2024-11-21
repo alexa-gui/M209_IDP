@@ -76,7 +76,7 @@ void competitionRoute() {
   goToCenter(1);
   }
   // adjSpeed(255);
-  
+
   //Box 2
   runTillIntersection();
   if(!runTillIntersectionOrBox()){
@@ -104,7 +104,7 @@ void competitionRoute() {
     goto box4_path;
   }
   digitalWrite(LED_YEL, HIGH);
-  
+
   turn180();
   runTillIntersection();
   turnRight();
@@ -125,7 +125,7 @@ box4_path:
   turnRight();
   runTillIntersection();
   turnRight();
-  if(!runTillIntersectionWithBox()){
+  if(!runTillIntersectionOrBox()){
     goto home_path;
   }
   digitalWrite(LED_YEL, HIGH);
@@ -166,7 +166,7 @@ void goToCenter(bool is_magnetic) {
   /*
   Starts and ends at top T-junction between centers, facing away from the wall
   */
-  
+
   if(is_magnetic) {
     runTillIntersection();
     turnSlightRight();
