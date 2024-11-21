@@ -1,8 +1,10 @@
 #ifndef PATHS_H
 #define PATHS_H
 
-void testRoute();
-void goToCenter();
+void testRouteLoop();
+void goToCenter(bool);
+void competitionRoute();
+void testBox3();
 void testGoToCenter();
 
 #endif

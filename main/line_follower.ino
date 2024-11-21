@@ -10,17 +10,18 @@ extern int photo;
 extern int LED_YEL;
 
 uint32_t hysteris_time = 0;
-#define INTERSECTION_DLY 2000
+#define INTERSECTION_DLY 1000
+
 bool isIntersection() {
   if (millis() - hysteris_time <= INTERSECTION_DLY)
     return false;
   bool intersection_raw = (adcRead(L2) || adcRead(R2));
-  //digitalWrite(LED_YEL, LOW);
+  digitalWrite(BlueLED, LOW);
   if (intersection_raw) {
     hysteris_time = millis();
-    //digitalWrite(LED_YEL, HIGH);
+    digitalWrite(BlueLED, HIGH);
   }
-  return (adcRead(L2) || adcRead(R2));
+  return intersection_raw;
 }
 
 void runTillTimed(uint32_t time_ms) {
@@ -35,6 +36,8 @@ void runTillIntersection() {
     followLine();
   }
   stop();
+  // delay(250);
+  // hysteris_time = millis();
   Serial.println("Detected Intersection");
   // digitalWrite(LED_YEL, 1);
   // delay(500);
@@ -170,6 +173,7 @@ void sweep() {
   }
 end_sweep:
   adjSpeed(255);
+  hysteris_time = millis() - 500;
   return;
 }
 
@@ -189,9 +193,9 @@ void exitBox() {
     }
   }
 
-  delay(500);
+  delay(250);
   startTime = millis();
-  while ((millis() - startTime) < 500) {
+  while ((millis() - startTime) < 250) {
     if ((adcRead(L2) == 1) || (adcRead(R2) == 1)) {
       break;
     }

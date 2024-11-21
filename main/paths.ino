@@ -1,8 +1,9 @@
 #include "line_follower.h"
 
 extern int LED_YEL;
+extern uint32_t hysteris_time;
 
-void testRoute() {
+void testRouteLoop() {
   /*
   setup routine:
     exitBox();
@@ -55,7 +56,7 @@ void testRoute() {
 
 void competitionRoute() {
   //Box 1
-  exitBox();
+  // exitBox();
   bool box1_failed = false;
   if(!runTillIntersectionOrBox()) {
     box1_failed = true;
@@ -87,7 +88,10 @@ void competitionRoute() {
   //runTillIntersection();
   // turnLeft();
   // delay(500);
-  turn180();
+  runTillIntersection();
+  turnLeft();
+  delay(500);
+  turnLeft();
   runTillIntersection();
   runTillIntersection();
   turnLeft();
@@ -100,7 +104,7 @@ void competitionRoute() {
   runTillIntersection();
   runTillIntersection();
   box3_path:
-  turnLeft();
+  turnSlightLeft();
   if(!runTillIntersectionOrBox()){
     goto box4_path;
   }
@@ -125,7 +129,7 @@ void competitionRoute() {
 box4_path:
   turnRight();
   runTillIntersection();
-  turnRight();
+  turnSlightRight();
   if(!runTillIntersectionOrBox()){
     goto home_path;
   }
@@ -153,15 +157,40 @@ box4_path:
   turnRight();
   runTillIntersection();
   turnRight();
-  home_path:
   runTillIntersection();
+  home_path:
   turnLeft();
   runTillIntersection();
-  runTillTimed(1000);
-  stop();
+  turnLeft();
+  delay(500);
+  turnLeft();
+  // runTillTimed(1000);
+  // stop();
 }
 
-extern uint32_t hysteris_time;
+void testBox3() {
+  runTillIntersection();
+  runTillIntersection();
+  turnLeft();
+  if(!runTillIntersectionOrBox()){
+    turnLeft();
+    delay(500);
+    turnLeft();
+  }
+  turn180();
+  runTillIntersection();
+  turnRight();
+  runTillIntersection();
+  stop();
+  delay(1000);
+  hysteris_time = millis();
+  runTillIntersection();
+  turnLeft();
+  delay(500);
+  turnLeft();
+  backOutTillIntersection();
+  goToCenter(1);
+}
 
 void goToCenter(bool is_magnetic) {
   /*
@@ -194,7 +223,6 @@ void goToCenter(bool is_magnetic) {
 
   }
   stop();
-  delay(2000);
   hysteris_time = millis();
 }
 
