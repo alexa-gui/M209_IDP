@@ -3,6 +3,7 @@
 #include "motor_control.h"
 #include "tof_sensor.h"
 #include "line_sensor_wrapper.h"
+#include "led_flash.h"
 
 extern Adafruit_DCMotor *leftMotor;
 extern Adafruit_DCMotor *rightMotor;
@@ -13,13 +14,12 @@ uint32_t hysteris_time = 0;
 #define INTERSECTION_DLY 1000
 
 bool isIntersection() {
+	ledFlash();
   if (millis() - hysteris_time <= INTERSECTION_DLY)
     return false;
   bool intersection_raw = (adcRead(L2) || adcRead(R2));
-  digitalWrite(BlueLED, LOW);
   if (intersection_raw) {
     hysteris_time = millis();
-    digitalWrite(BlueLED, HIGH);
   }
   return intersection_raw;
 }
@@ -73,22 +73,29 @@ void backOutTillIntersection() {
   if(adcRead(L2)&&adcRead(R2))
     return;
   if(adcRead(L2)&&!adcRead(R2)){
-    while(!adcRead(R2))
+    while(!adcRead(R2)) {
       adjSlightRightReverse();
+	  ledFlash();
+	}
   }
     if(!adcRead(L2)&&adcRead(R2)){
-    while(!adcRead(L2))
+    while(!adcRead(L2)) {
       adjSlightLeftReverse();
+	  ledFlash();
+	}
   }
   stop();
-  //hysteris_time = millis();
+  // hysteris_time = millis();
+  // Unsure if this should be commented out or not
 }
 
 void turn180() {
   while(digitalRead(R2) == 0) {
+	  ledFlash();
     adjLeft();
   }
   while(digitalRead(L2) == 0) {
+	  ledFlash();
     adjSlightLeftReverse();
   }
   turnLeft();
@@ -97,9 +104,10 @@ void turn180() {
 void turnRight() {  //turnRight
 
   adjRight();
-  delay(TURN_DLY);
+  delayWithFlash(TURN_DLY);
   while (1) {
     // if (adcRead(R1) == 1) {
+		ledFlash();
     if (risingEdgeRead(R1) == 1) {
       break;
     }
@@ -110,9 +118,10 @@ void turnLeft() {  //turnLeft
 
   adjLeft();
 
-  delay(TURN_DLY);
+  delayWithFlash(TURN_DLY);
   while (1) {
     // if (adcRead(L1) == 1) {
+	  ledFlash();
     if (risingEdgeRead(L1) == 1) {
       break;
     }
@@ -121,9 +130,10 @@ void turnLeft() {  //turnLeft
 void turnSlightRight() {  //turnRight
 
   adjSlightRight();
-  delay(TURN_DLY);
+  delayWithFlash(TURN_DLY);
   while (1) {
     // if (adcRead(R1) == 1) {
+	  ledFlash();
     if (risingEdgeRead(R1) == 1) {
       break;
     }
@@ -134,9 +144,10 @@ void turnSlightLeft() {  //turnLeft
 
   adjSlightLeft();
 
-  delay(TURN_DLY);
+  delayWithFlash(TURN_DLY);
   while (1) {
     // if (adcRead(L1) == 1) {
+	  ledFlash();
     if (risingEdgeRead(L1) == 1) {
       break;
     }
@@ -152,6 +163,7 @@ void sweep() {
     adjLeft();
     startTime = millis();
     while ((millis() - startTime) < 1000) {
+		ledFlash();
       if ((adcRead(L1) == 1) || (adcRead(R1) == 1)) {
         goto end_sweep;
       }
@@ -159,6 +171,7 @@ void sweep() {
     adjRight();
     startTime = millis();
     while ((millis() - startTime) < 2000) {
+		ledFlash();
       if ((adcRead(L1) == 1) || (adcRead(R1) == 1)) {
         goto end_sweep;
       }
@@ -166,6 +179,7 @@ void sweep() {
     adjLeft();
     startTime = millis();
     while ((millis() - startTime) < 1000) {
+		ledFlash();
       if ((adcRead(L1) == 1) || (adcRead(R1) == 1)) {
         goto end_sweep;
       }
@@ -185,6 +199,7 @@ void exitBox() {
   forward();
 
   while ((exitLeft == 0) || (exitRight == 0)) {
+		ledFlash();
     if (adcRead(L2) == 1) {
       exitLeft = 1;
     }
@@ -196,6 +211,7 @@ void exitBox() {
   delay(250);
   startTime = millis();
   while ((millis() - startTime) < 250) {
+		ledFlash();
     if ((adcRead(L2) == 1) || (adcRead(R2) == 1)) {
       break;
     }
@@ -208,6 +224,7 @@ void followLine() {
   if (digitalRead(button))
     while (1) { stop(); }
 
+		ledFlash();
   if ((adcRead(R1) == 0) && (adcRead(L1) == 0)) { forward(); }  //if Right Sensor and Left Sensor are at black color then it will call forword function
 
   // if ((digitalRead(R1) == 1) && (digitalRead(L1) == 0)) { adjRight(); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
