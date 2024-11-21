@@ -57,12 +57,13 @@ void competitionRoute() {
   //Box 1
   exitBox();
   bool box1_failed = false;
-  if(!runTillIntersectionOrBox()){
+  if(!runTillIntersectionOrBox()) {
     box1_failed = true;
-  }else{
+  }
+  else{
     runTillIntersection();
   }
-  digitalWrite(LED_YEL, HIGH);
+  //digitalWrite(LED_YEL, HIGH);
   turnLeft();
   runTillIntersection();
   turnRight();
@@ -82,7 +83,7 @@ void competitionRoute() {
   if(!runTillIntersectionOrBox()){
     goto box3_path;
   }
-  digitalWrite(LED_YEL, HIGH);
+  //digitalWrite(LED_YEL, HIGH);
   //runTillIntersection();
   // turnLeft();
   // delay(500);
@@ -103,7 +104,7 @@ void competitionRoute() {
   if(!runTillIntersectionOrBox()){
     goto box4_path;
   }
-  digitalWrite(LED_YEL, HIGH);
+  //digitalWrite(LED_YEL, HIGH);
 
   turn180();
   runTillIntersection();
@@ -128,7 +129,7 @@ box4_path:
   if(!runTillIntersectionOrBox()){
     goto home_path;
   }
-  digitalWrite(LED_YEL, HIGH);
+  //digitalWrite(LED_YEL, HIGH);
   turn180();
   runTillIntersection();
   turnLeft();

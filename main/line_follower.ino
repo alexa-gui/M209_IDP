@@ -46,7 +46,7 @@ bool runTillIntersectionOrBox() {
     if(isIntersection()){
 		stop();
 		return false;
-	}
+	  }
     followLine();
   }
   stop();

@@ -5,9 +5,9 @@
 #include "paths.h"
 #include "Wire.h"
 #include "DFRobot_VL53L0X.h"
-#include <Servo.h>
+//#include <Servo.h>
 
-Servo servo1;  // create servo object to control a servo
+//Servo servo1;  // create servo object to control a servo
 
 DFRobot_VL53L0X sensor;
 // Arduino Line Follower Robot Code
@@ -67,13 +67,14 @@ void setup() {
 
  pinMode(BlueLED, OUTPUT);
  pinMode(LED_YEL, OUTPUT);
+ digitalWrite(LED_YEL, LOW);
  pinMode(L1, INPUT);
  pinMode(R1, INPUT);
  pinMode(L2, INPUT);
  pinMode(R2, INPUT);
  pinMode(button, INPUT);
  pinMode(photo, INPUT);
- servo1.attach(9);
+ //servo1.attach(9);
 
   if (!AFMS.begin()) {  // create with the default frequency 1.6KHz
                         // if (!AFMS.begin(1000)) {  // OR with a different frequency, say 1KHz
@@ -98,11 +99,11 @@ void setup() {
   }
 
   adjSpeed(255);
-  servo1.write(0);
-  delay(1000);
-  servo1.write(150);
+  // servo1.write(0);
+  // delay(1000);
+  // servo1.write(150);
 
-  // competitionRoute();
+  competitionRoute();
 }
 
 void loop() {
