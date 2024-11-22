@@ -8,7 +8,7 @@ void ledFlash(){
 	if(is_moving) {
 		if(millis() - previous_toggle_time >= PULSE_TIME){
 			digitalWrite(BlueLED,!previous_led_state);
-			prevous_led_state = !previous_led_state;
+			previous_led_state = !previous_led_state;
 		}
 	}
 	else {
