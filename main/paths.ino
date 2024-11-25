@@ -134,7 +134,16 @@ box4_path:
     goto home_path;
   }
   //digitalWrite(LED_YEL, HIGH);
-  turn180();
+  // turn180();
+  // turn left with no rising edge
+  adjLeft();
+
+  delay(50);
+  while (1) {
+	  if (adcRead(L1) == 1) {
+		break;
+	  }
+  }
   runTillIntersection();
   turnLeft();
   runTillIntersection();
