@@ -12,7 +12,7 @@
    @version  V1.0
    @date  2017-05-15
 */
-#define IR 4
+#define IR 9
 
 void setup() 
 {
@@ -23,14 +23,14 @@ void setup()
 
 void loop() 
 {
-  Serial.println("-------------------------RF-----------------------");
+  //Serial.println("-------------------------RF-----------------------");
   if(digitalRead(IR) == 1){
     Serial.println("Switch: NO"); //NO if no obstacle within range
-    delay(500);
+    delay(50);
   }
   else{
     Serial.println("Switch: YES");
-    Serial.println();
-    delay(500);
+    //Serial.println();
+    delay(50);
   }
 }

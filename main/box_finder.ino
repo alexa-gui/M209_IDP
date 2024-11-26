@@ -5,10 +5,11 @@
 #include "led_flash.h"
 
 extern int photo;
-
-void findBox() {
-	adjSpeed(255);
-
+extern uint32_t hysteris_time;
+#define TIME_THRESHOLD 4800
+bool findBox() {
+	adjSpeed(150);
+  uint32_t tm = millis();
   Serial.println("wall section start");
   while(!digitalRead(photo)) {
 	ledFlash();
@@ -24,6 +25,11 @@ void findBox() {
   }
   Serial.println("box found");
 
+  Serial.println(millis() - tm);
+  if(millis() - tm > TIME_THRESHOLD){
+    adjSpeed(255);
+    return false;
+  }
   uint32_t startTime = millis();
   while(millis() - startTime < 1200) {
 	  ledFlash();
@@ -31,6 +37,7 @@ void findBox() {
   }
 
   stop();
+  return true;
 }
 
 void faceBox() {
@@ -45,5 +52,6 @@ void faceBox() {
 	  ledFlash();
     adjSlightLeftReverse();
   }
+  hysteris_time = millis();
   stop();
 }

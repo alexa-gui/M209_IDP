@@ -19,7 +19,7 @@ int R1 = A1;
 int L2 = A2;
 int R2 = A3;
 int button = 2;
-int photo = 6;
+int photo = 9;
 int turnCounter = 0;
 
 // Create the motor shield object with the default I2C address
@@ -103,6 +103,11 @@ void setup() {
   // servo1.write(150);
 
   exitBox();
+  // runTillIntersection();
+  // if(findBox()){
+  //   faceBox();
+  // }
+  // runTillEvent();
 }
 
 void loop() {

@@ -131,7 +131,7 @@ box4_path:
   runTillIntersection();
   turnSlightRight();
   if(!runTillIntersectionOrBox()){
-    goto home_path;
+    goto box5_path;
   }
   //digitalWrite(LED_YEL, HIGH);
   // turn180();
@@ -157,7 +157,39 @@ box4_path:
   turnLeft();
   backOutTillIntersection();
   goToCenter(0);
-
+  // box 5: offline box close to home
+ runTillIntersection();
+  runTillIntersection();
+  turnLeft();
+  runTillIntersection();
+  turnRight();
+  runTillIntersection();
+  turnSlightRight();
+  runTillIntersection();
+box5_path:
+  if(findBox()){
+    faceBox();
+    runTillEvent();
+    backOutTillIntersection();
+    turnLeft();
+    runTillIntersection();
+    turnRight();
+    runTillIntersection();
+    runTillIntersection();
+    turnRight();
+    runTillIntersection();
+    turnRight();
+    goToCenter(1);
+  } else{
+    turnRight();
+    runTillIntersection();
+    turnRight();
+    runTillIntersection();
+    turnLeft();
+    delay(500);
+    turnLeft();
+    return;
+  }
   // return to start
   runTillIntersection();
   runTillIntersection();
