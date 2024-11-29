@@ -1,14 +1,27 @@
 #include "tof_sensor.h"
 
 extern int LED_YEL;
-
+float readings_buf [100] = {100};
+int threshold = 10;
 uint8_t getDistanceReading(){
 	// TODO
 	float dist_raw = sensor.getDistance();
-	if(dist_raw <= GROUND_FLAT) {
-    digitalWrite(LED_YEL, HIGH);
-		return FLAT;
+  Serial.println(dist_raw);
+  int i;
+  for(i = 98; i >= 0; i--)
+    readings_buf[i+1] = readings_buf[i];
+  readings_buf[0] = dist_raw;
+  bool all_below = true;
+  for(i = 0; i<threshold; i++){
+    if(readings_buf[i]>60){
+        all_below = false;
+        break;
+    }
   }
-  digitalWrite(LED_YEL, LOW);
-	return GROUND;
+  if(all_below){
+    for(i = 0; i<threshold; i++)
+      readings_buf[i] = 100;
+    return FLAT;
+  }
+  return GROUND;
 }

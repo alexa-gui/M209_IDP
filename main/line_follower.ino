@@ -33,17 +33,28 @@ void runTillTimed(uint32_t time_ms) {
 
 void runTillIntersection() {
   while (!isIntersection()) {
+	  ledFlash();
     followLine();
   }
   stop();
-  // delay(250);
+  // delayWithFlash(250);
   // hysteris_time = millis();
   Serial.println("Detected Intersection");
   // digitalWrite(LED_YEL, 1);
-  // delay(500);
+  // delayWithFlash(500);
   // digitalWrite(LED_YEL, 0);
 }
-
+bool zigzagRunTillIntersectionOrBox() {
+  while(getDistanceReading()==GROUND){
+    if(isIntersection()){
+		stop();
+		return false;
+	  }
+    zigzagFollowLine();
+  }
+  stop();
+  return true;
+}
 bool runTillIntersectionOrBox() {
   while(getDistanceReading()==GROUND){
     if(isIntersection()){
@@ -154,6 +165,34 @@ void turnSlightLeft() {  //turnLeft
   }
 }
 
+void turnDiffRight(int speed) {
+  adjDiffRight(speed);                    //as adjRight but with right motor at speed 'speed'
+
+  delayWithFlash(TURN_DLY);
+  while (1) {
+    // if (adcRead(R1) == 1) {
+	  ledFlash();
+    if (risingEdgeRead(R1) == 1) {
+      break;
+    }
+  }
+  adjSpeed(255);
+}
+
+void turnDiffLeft(int speed) {
+  adjDiffLeft(speed);                     //as adjLeft but with right motor at speed 'speed'
+
+  delayWithFlash(TURN_DLY);
+  while (1) {
+    // if (adcRead(L1) == 1) {
+	  ledFlash();
+    if (risingEdgeRead(L1) == 1) {
+      break;
+    }
+  }
+  adjSpeed(255);
+}
+
 void sweep() {
   uint32_t startTime;
 
@@ -161,6 +200,7 @@ void sweep() {
 
   while (1) {
     adjLeft();
+	ledFlash();
     startTime = millis();
     while ((millis() - startTime) < 1000) {
 		ledFlash();
@@ -207,8 +247,8 @@ void exitBox() {
       exitRight = 1;
     }
   }
-
-  delay(250);
+  Serial.println("Exited box boundary");
+  delayWithFlash(250);
   startTime = millis();
   while ((millis() - startTime) < 250) {
 		ledFlash();
@@ -219,7 +259,16 @@ void exitBox() {
   stop();
   sweep();
 }
+void zigzagFollowLine(){
+    if (digitalRead(button))
+    while (1) { stop(); }
 
+		ledFlash();
+  if ((adcRead(R1) == 0) && (adcRead(L1) == 0)) { forward(); delay(10);} 
+  if ((adcRead(R1) == 1) && (adcRead(L1) == 0)) { adjSlightRight(); delay(10);} 
+  if ((adcRead(R1) == 0) && (adcRead(L1) == 1)) { adjSlightLeft(); delay(10);}
+  if ((adcRead(R1) == 1) && (adcRead(L1) == 1)) { forward(); delay(10);} 
+}
 void followLine() {
   if (digitalRead(button))
     while (1) { stop(); }

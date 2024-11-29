@@ -2,7 +2,7 @@
 #define TOF_SENSOR_H
 #include "DFRobot_VL53L0X.h"
 
-#define GROUND_FLAT 65
+#define GROUND_FLAT 110
 
 #define GROUND 0
 #define FLAT 1
