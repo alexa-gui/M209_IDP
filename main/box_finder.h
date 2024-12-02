@@ -2,7 +2,7 @@
 #define BOX_FINDER_H
 #include <Adafruit_Motorshield.h>
 
-void findBox();
-void faceBox();
+bool findBox();
+void collectBox();
 
 #endif
