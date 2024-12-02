@@ -109,10 +109,11 @@ void setup() {
   // servo1.write(150);
 
   exitBox();
+  competitionRoute();
 }
 
 void loop() {
-  competitionRoute();
+  // competitionRoute();
   // testBox3();
   //testGoToCenter();
 }

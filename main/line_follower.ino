@@ -44,9 +44,9 @@ void runTillIntersection() {
   // digitalWrite(LED_YEL, 0);
 }
 
-bool runTillIntersectionOrBox() {
-  while(getDistanceReading()==GROUND){
-    if(isIntersection()){
+bool runTillIntersectionOrBox() {           //returns true if box found
+  while(getDistanceReading() == GROUND) {
+    if(isIntersection()) {
 		stop();
 		return false;
 	  }

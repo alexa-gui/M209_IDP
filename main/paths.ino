@@ -10,6 +10,7 @@ void testRouteLoop() {
     runTillIntersection();
     turnLeft();
   */
+
   while(1) {
     runTillIntersection();
     turnRight();
@@ -55,6 +56,10 @@ void testRouteLoop() {
 }
 
 void competitionRoute() {
+  /*
+  Route to be followed in competition
+  */
+
   //Box 1
   // exitBox();
   bool box1_failed = false;
@@ -161,14 +166,18 @@ box4_path:
   home_path:
   turnLeft();
   runTillIntersection();
-  turnLeft();
-  delay(500);
-  turnLeft();
-  // runTillTimed(1000);
-  // stop();
+  // turnLeft();
+  // delay(500);
+  // turnLeft();
+  runTillTimed(1000);
+  stop();
 }
 
 void testBox3() {
+  /*
+  Run as loop from goToCenter origin, picks up box 3 and drops at center
+  */
+
   runTillIntersection();
   runTillIntersection();
   turnLeft();
@@ -200,7 +209,7 @@ void goToCenter(bool is_magnetic) {
   if(is_magnetic) {
     runTillIntersection();
     turnSlightRight();
-    runTillTimed(1400);
+    runTillTimed(2000);
     digitalWrite(LED_YEL, LOW);
     backOutTillIntersection();
     turnRight();
@@ -214,7 +223,7 @@ void goToCenter(bool is_magnetic) {
     turnSlightLeft();
     runTillIntersection();
     turnSlightRight();
-    runTillTimed(1400);
+    runTillTimed(2000);
     digitalWrite(LED_YEL, LOW);
     backOutTillIntersection();
     turnSlightRight();
@@ -227,6 +236,10 @@ void goToCenter(bool is_magnetic) {
 }
 
 void testGoToCenter() {
+  /*
+  Run as loop from goToCenter origin, goes continually from one center to other
+  */
+
   goToCenter(1);
   goToCenter(0);
 }
