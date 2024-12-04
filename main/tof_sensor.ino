@@ -3,8 +3,11 @@
 extern int LED_YEL;
 float readings_buf[100] = { 200 };
 int threshold = 10;
-uint8_t getDistanceReading() {
-  // TODO
+bool getDistanceReading() {
+	/*
+	   Returns whether the TOF has detected a box in front of it
+	   Has to have 10 readings in a row that are closer than the threshold
+	 */
   float dist_raw = sensor.getDistance();
   Serial.println(dist_raw);
   int i;
@@ -21,7 +24,7 @@ uint8_t getDistanceReading() {
   if (all_below) {
     for (i = 0; i < threshold; i++)
       readings_buf[i] = 200;
-    return FLAT;
+    return true;
   }
-  return GROUND;
+  return false;
 }

@@ -3,7 +3,7 @@
 
 bool is_moving = false;
 
-void forward() {  //forword
+void forward() {
 	is_moving = true;
   leftMotor->run(BACKWARD);
   rightMotor->run(BACKWARD);
@@ -15,19 +15,19 @@ void reverse(){
   rightMotor->run(FORWARD);
 }
 
-void adjRight() {  //turnRight
+void adjRight() {
 	is_moving = true;
   rightMotor->run(FORWARD);
   leftMotor->run(BACKWARD);
 }
 
-void adjLeft() {  //turnLeft
+void adjLeft() {
 	is_moving = true;
   rightMotor->run(BACKWARD);
   leftMotor->run(FORWARD);
 }
 
-void stop() {  //stop
+void stop() {
 	is_moving = false;
   leftMotor->run(RELEASE);
   rightMotor->run(RELEASE);
@@ -70,6 +70,6 @@ void adjDiffLeft(int speed) {
 }
 
 void adjSpeed(uint8_t speed){
-	rightMotor->setSpeed(RIGHT_SLOW_RATIO(speed));
-	leftMotor->setSpeed(LEFT_SLOW_RATIO(speed));
+	rightMotor->setSpeed(speed);
+	leftMotor->setSpeed(speed);
 }

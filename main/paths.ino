@@ -3,60 +3,8 @@
 
 extern uint32_t hysteris_time;
 extern uint32_t startTime;
-
-void testRouteLoop() {
-  /*
-  setup routine:
-    exitBox();
-    runTillIntersection();
-    turnLeft();
-  */
-
-  while (1) {
-    runTillIntersection();
-    turnRight();
-
-    runTillIntersection();
-    runTillIntersection();
-    turnRight();
-
-    runTillIntersection();
-    turnRight();
-
-    runTillIntersection();
-    runTillIntersection();
-    turnLeft();
-
-    runTillIntersection();
-    turnLeft();
-
-    runTillIntersection();
-    turnLeft();
-
-    runTillIntersection();
-    turnSlightLeft();
-    runTillTimed(1400);
-    backOutTillIntersection();
-    turnRight();
-
-    runTillIntersection();
-    turnLeft();
-
-    runTillIntersection();
-    runTillIntersection();
-    turnLeft();
-
-    runTillIntersection();
-    turnRight();
-
-    runTillIntersection();
-    turnRight();
-
-    runTillIntersection();
-  }
-}
-
 extern int Magnetic1, Magnetic2;
+
 void competitionRoute() {
   /*
   Route to be followed in competition
@@ -66,7 +14,7 @@ void competitionRoute() {
   bool box1_failed = false;
   if (!runTillIntersectionOrBox()) {
     box1_failed = true;
-  } 
+  }
   else {
     pickUpBox();
     runTillIntersection();
@@ -145,6 +93,7 @@ box4_path:
   }
   stop();
   pickUpBox();
+
   // turn left with no rising edge
   adjLeft();
   delayWithFlash(50);
@@ -180,6 +129,7 @@ box5_path:
   if (findBox()) {
     // detected box, pick up and go to drop off center
     if(!collectBox()){
+		// Failed to collect box
       goto box5_fail;
     }
     turnLeft();
@@ -200,9 +150,6 @@ box5_path:
     runTillIntersection();
     runTillTimed(1000);
     stop();
-    // turnLeft();
-    // delayWithFlash(500);
-    // turnLeft();
     return;
   }
 
@@ -214,44 +161,12 @@ box5_path:
   turnRight();
   runTillIntersection();
   turnRight();
-  // runTillTimed(3000);
-  // turn180();
-  // turn180();
   runTillIntersection();
 home_path:
   turnLeft();
   runTillIntersection();
-  // while(millis() - startTime < 296000) {stop();}
   runTillTimed(1000);
   stop();
-}
-
-void testBox3() {
-  /*
-  Run as loop from goToCenter origin, picks up box 3 and drops at center
-  */
-
-  runTillIntersection();
-  runTillIntersection();
-  turnLeft();
-  if (!runTillIntersectionOrBox()) {
-    turnLeft();
-    delayWithFlash(500);
-    turnLeft();
-  }
-  turn180();
-  runTillIntersection();
-  turnRight();
-  runTillIntersection();
-  stop();
-  delayWithFlash(1000);
-  hysteris_time = millis();
-  runTillIntersection();
-  turnLeft();
-  delayWithFlash(500);
-  turnLeft();
-  backOutTillIntersection();
-  goToCenter(1);
 }
 
 extern int GreenLED, RedLED;
@@ -273,7 +188,6 @@ void goToCenter(bool is_magnetic) {
     delayWithFlash(500);
     grabberClose();
     digitalWrite(RedLED, LOW);
-    // digitalWrite(LED_YEL, LOW);
     backOutTillIntersection();
     turnRight();
     runTillIntersection();
@@ -294,7 +208,6 @@ void goToCenter(bool is_magnetic) {
     delayWithFlash(500);
     grabberClose();
     digitalWrite(GreenLED, LOW);
-    // digitalWrite(LED_YEL, LOW);
     backOutTillIntersection();
     turnSlightRight();
     runTillIntersection();
@@ -302,13 +215,4 @@ void goToCenter(bool is_magnetic) {
   }
   stop();
   hysteris_time = millis();
-}
-
-void testGoToCenter() {
-  /*
-  Run as loop from goToCenter origin, goes continually from one center to other
-  */
-
-  goToCenter(1);
-  goToCenter(0);
 }

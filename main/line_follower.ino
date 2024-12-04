@@ -14,6 +14,8 @@ uint32_t hysteris_time = 0;
 #define INTERSECTION_DLY 1000
 
 bool isIntersection() {
+	// Returns if the robot detects an intersection
+	// with a filter that only allows detection 1 sec after a previous detection
 	ledFlash();
   if (millis() - hysteris_time <= INTERSECTION_DLY)
     return false;
@@ -25,6 +27,7 @@ bool isIntersection() {
 }
 
 void runTillTimed(uint32_t time_ms) {
+	// Line follow for a set amount of time
   uint32_t currentTime = millis();
   while (millis() - currentTime <= time_ms)
     followLine();
@@ -32,33 +35,21 @@ void runTillTimed(uint32_t time_ms) {
 }
 
 void runTillIntersection() {
+	// Line follow until the robot detects an intersection
   while (!isIntersection()) {
 	  ledFlash();
     followLine();
   }
   stop();
-  // delayWithFlash(250);
-  // hysteris_time = millis();
   Serial.println("Detected Intersection");
-  // digitalWrite(LED_YEL, 1);
-  // delayWithFlash(500);
-  // digitalWrite(LED_YEL, 0);
-}
-
-bool zigzagRunTillIntersectionOrBox() {
-  while(getDistanceReading()==GROUND){
-    if(isIntersection()){
-		stop();
-		return false;
-	  }
-    zigzagFollowLine();
-  }
-  stop();
-  return true;
 }
 
 bool runTillIntersectionOrBox() {
-  while(getDistanceReading()==GROUND){
+	/*
+	   Line follows until the robot either detects a box or hits an intersection
+	   Returns true if it detects a box
+	 */
+  while(!getDistanceReading()){
     if(isIntersection()){
 		stop();
 		return false;
@@ -69,15 +60,9 @@ bool runTillIntersectionOrBox() {
   return true;
 }
 
-void runTillEvent() {
-  while (!isIntersection() && (getDistanceReading() == GROUND)) {
-    followLine();
-  }
-  stop();
-  Serial.println("Detected Intersection or Box");
-}
-
 void backOutTillIntersection() {
+	// Back out till both line sensors detect an intersection
+	// This is done to ensure the robot is perpendicular to the line
   while (!isIntersection()) {
     reverse();
   }
@@ -98,11 +83,10 @@ void backOutTillIntersection() {
 	}
   }
   stop();
-  // hysteris_time = millis();
-  // Unsure if this should be commented out or not
 }
 
 void turn180() {
+	// 3 point turn that turns the robot around, the turning radius is smaller than just a single turn
   while(digitalRead(R2) == 0) {
 	  ledFlash();
     adjLeft();
@@ -114,12 +98,11 @@ void turn180() {
   turnLeft();
 }
 
-void turnRight() {  //turnRight
-
+void turnRight() {
+	// Turns right differentially until the right central sensor detects a rising edge
   adjRight();
-  delayWithFlash(TURN_DLY);
+  delayWithFlash(TURN_DLY); // added a delay to ensure the robot doesn't detect the current line its on
   while (1) {
-    // if (adcRead(R1) == 1) {
 		ledFlash();
     if (risingEdgeRead(R1) == 1) {
       break;
@@ -127,25 +110,23 @@ void turnRight() {  //turnRight
   }
 }
 
-void turnLeft() {  //turnLeft
-
+void turnLeft() {
+	// Turns left differentially until the left central sensor detects a rising edge
   adjLeft();
 
-  delayWithFlash(TURN_DLY);
+  delayWithFlash(TURN_DLY); // added a delay to ensure the robot doesn't detect the current line its on
   while (1) {
-    // if (adcRead(L1) == 1) {
 	  ledFlash();
     if (risingEdgeRead(L1) == 1) {
       break;
     }
   }
 }
-void turnSlightRight() {  //turnRight
-
+void turnSlightRight() {
+	// Turns right with only left motor going forwards until right central sensor detects a rising edge
   adjSlightRight();
-  delayWithFlash(TURN_DLY);
+  delayWithFlash(TURN_DLY); // added a delay to ensure the robot doesn't detect the current line its on
   while (1) {
-    // if (adcRead(R1) == 1) {
 	  ledFlash();
     if (risingEdgeRead(R1) == 1) {
       break;
@@ -153,13 +134,11 @@ void turnSlightRight() {  //turnRight
   }
 }
 
-void turnSlightLeft() {  //turnLeft
-
+void turnSlightLeft() {
+	// Turns left with only right motor going forwards until left central sensor detects a rising edge
   adjSlightLeft();
-
-  delayWithFlash(TURN_DLY);
+  delayWithFlash(TURN_DLY); // added a delay to ensure the robot doesn't detect the current line its on
   while (1) {
-    // if (adcRead(L1) == 1) {
 	  ledFlash();
     if (risingEdgeRead(L1) == 1) {
       break;
@@ -168,11 +147,11 @@ void turnSlightLeft() {  //turnLeft
 }
 
 void turnDiffRight(int speed) {
-  adjDiffRight(speed);                    //as adjRight but with right motor at speed 'speed'
+	// Turns right with left motor full speed and right motor at a different speed
+  adjDiffRight(speed); //adjRight but with right motor at speed 'speed'
 
-  delayWithFlash(TURN_DLY);
+  delayWithFlash(TURN_DLY); // added a delay to ensure the robot doesn't detect the current line its on
   while (1) {
-    // if (adcRead(R1) == 1) {
 	  ledFlash();
     if (risingEdgeRead(R1) == 1) {
       break;
@@ -182,11 +161,11 @@ void turnDiffRight(int speed) {
 }
 
 void turnDiffLeft(int speed) {
-  adjDiffLeft(speed);                     //as adjLeft but with right motor at speed 'speed'
+	// Turns left with right motor full speed and left motor at a different speed
+  adjDiffLeft(speed); //adjLeft but with right motor at speed 'speed'
 
-  delayWithFlash(TURN_DLY);
+  delayWithFlash(TURN_DLY); // added a delay to ensure the robot doesn't detect the current line its on
   while (1) {
-    // if (adcRead(L1) == 1) {
 	  ledFlash();
     if (risingEdgeRead(L1) == 1) {
       break;
@@ -196,11 +175,13 @@ void turnDiffLeft(int speed) {
 }
 
 void sweep() {
+	// Sweeps left and right until the robot finds a line
   uint32_t startTime;
 
   adjSpeed(150);
 
   while (1) {
+	  // Sweep left for 1 sec or until either central sensor detects the line
     adjLeft();
 	ledFlash();
     startTime = millis();
@@ -210,6 +191,8 @@ void sweep() {
         goto end_sweep;
       }
     }
+
+	  // Sweep right for 2 sec or until either central sensor detects the line
     adjRight();
     startTime = millis();
     while ((millis() - startTime) < 2000) {
@@ -218,6 +201,8 @@ void sweep() {
         goto end_sweep;
       }
     }
+
+	  // Sweep left for 1 sec or until either central sensor detects the line
     adjLeft();
     startTime = millis();
     while ((millis() - startTime) < 1000) {
@@ -227,6 +212,7 @@ void sweep() {
       }
     }
   }
+
 end_sweep:
   adjSpeed(255);
   hysteris_time = millis() - 500;
@@ -234,10 +220,12 @@ end_sweep:
 }
 
 void exitBox() {
+	// Exit the starting box by first exiting the box boundary is and then sweeping onto the line
   bool exitLeft = 0;
   bool exitRight = 0;
   uint32_t startTime;
 
+  // Forward until both side sensors have passed the box boundary
   forward();
 
   while ((exitLeft == 0) || (exitRight == 0)) {
@@ -250,6 +238,9 @@ void exitBox() {
     }
   }
   Serial.println("Exited box boundary");
+
+  // continue forwards for a bit, stopping if the side sensors hit the central line
+  // signifying an overshoot
   delayWithFlash(250);
   startTime = millis();
   while ((millis() - startTime) < 250) {
@@ -259,31 +250,21 @@ void exitBox() {
     }
   }
   stop();
+
+  // Sweep onto the line
   sweep();
 }
-void zigzagFollowLine(){
-    if (digitalRead(button))
-    while (1) { stop(); }
 
-		ledFlash();
-  if ((adcRead(R1) == 0) && (adcRead(L1) == 0)) { forward(); }
-  if ((adcRead(R1) == 1) && (adcRead(L1) == 0)) { adjSlightRight(); }
-  if ((adcRead(R1) == 0) && (adcRead(L1) == 1)) { adjSlightLeft(); }
-  if ((adcRead(R1) == 1) && (adcRead(L1) == 1)) { forward(); } 
-  delay(50);
-}
 void followLine() {
+	// One iteration of line following
+
+	// Stop button
   if (digitalRead(button))
     while (1) { stop(); }
 
-		ledFlash();
+  ledFlash();
   if ((adcRead(R1) == 0) && (adcRead(L1) == 0)) { forward(); }  //if Right Sensor and Left Sensor are at black color then it will call forword function
-
-  // if ((digitalRead(R1) == 1) && (digitalRead(L1) == 0)) { adjRight(); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
   if ((adcRead(R1) == 1) && (adcRead(L1) == 0)) { adjSlightRight(); }  //if Right Sensor is white and Left Sensor is black then it will call turn Right function
-
-  // if ((digitalRead(R1) == 0) && (digitalRead(L1) == 1)) { adjLeft(); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
   if ((adcRead(R1) == 0) && (adcRead(L1) == 1)) { adjSlightLeft(); }  //if Right Sensor is black and Left Sensor is white then it will call turn Left function
-
   if ((adcRead(R1) == 1) && (adcRead(L1) == 1)) { forward(); }  //if Right Sensor and Left Sensor are at white color then it will call stop function
 }
