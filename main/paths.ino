@@ -1,8 +1,8 @@
 #include "line_follower.h"
 #include "grabber.h"
 
-// extern int LED_YEL;
 extern uint32_t hysteris_time;
+extern uint32_t startTime;
 
 void testRouteLoop() {
   /*
@@ -139,7 +139,7 @@ box4_path:
   runTillIntersection();
   turnSlightRight();
   hysteris_time = millis();
-  if (!zigzagRunTillIntersectionOrBox()) {
+  if (!runTillIntersectionOrBox()) {
     // if not found box 4, continue onto box 5 without going back
     goto box5_path;
   }
@@ -179,7 +179,9 @@ box4_path:
 box5_path:
   if (findBox()) {
     // detected box, pick up and go to drop off center
-    collectBox();
+    if(!collectBox()){
+      goto box5_fail;
+    }
     turnLeft();
     runTillIntersection();
     turnRight();
@@ -191,6 +193,7 @@ box5_path:
     goToCenter(digitalRead(Magnetic1) || digitalRead(Magnetic2));
   } else {
     // didn't detect box, run back to finish box and turn around to complete loop
+    box5_fail:
     turnRight();
     runTillIntersection();
     turnRight();
@@ -211,13 +214,14 @@ box5_path:
   turnRight();
   runTillIntersection();
   turnRight();
+  // runTillTimed(3000);
+  // turn180();
+  // turn180();
   runTillIntersection();
 home_path:
   turnLeft();
   runTillIntersection();
-  // turnLeft();
-  // delay(500);
-  // turnLeft();
+  // while(millis() - startTime < 296000) {stop();}
   runTillTimed(1000);
   stop();
 }
@@ -249,6 +253,7 @@ void testBox3() {
   backOutTillIntersection();
   goToCenter(1);
 }
+
 extern int GreenLED, RedLED;
 void goToCenter(bool is_magnetic) {
   /*
@@ -259,8 +264,8 @@ void goToCenter(bool is_magnetic) {
   if (is_magnetic) {
     digitalWrite(RedLED, HIGH);
     runTillIntersection();
-    turnSlightRight();
-    runTillTimed(2000);
+    turnDiffRight(50);
+    runTillTimed(1000);
     grabberOpen();
     grabberDown();
     delayWithFlash(1000);
@@ -280,9 +285,8 @@ void goToCenter(bool is_magnetic) {
     digitalWrite(GreenLED, HIGH);
     turnSlightLeft();
     runTillIntersection();
-    // turnSlightRight();
-    turnRight();
-    runTillTimed(2000);
+    turnDiffRight(50);
+    runTillTimed(1000);
     grabberOpen();
     grabberDown();
     delayWithFlash(1000);

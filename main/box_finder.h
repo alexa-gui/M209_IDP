@@ -3,6 +3,6 @@
 #include <Adafruit_Motorshield.h>
 
 bool findBox();
-void collectBox();
+bool collectBox();
 
 #endif

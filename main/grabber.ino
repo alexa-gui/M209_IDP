@@ -18,11 +18,11 @@ void grabberClose(){
 }
 
 void grabberUp(){
-	lifter.write(115);
+	lifter.write(35);
 }
 
 void grabberDown(){
-	lifter.write(70);
+	lifter.write(2);
 }
 
 void pickUpBox() {

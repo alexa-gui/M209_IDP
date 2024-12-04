@@ -38,7 +38,7 @@ bool findBox() {
     return false;
   }
   uint32_t startTime = millis();
-  while(millis() - startTime < 1000) {
+  while(millis() - startTime < 1200) {
 	  ledFlash();
     followLine();
   }
@@ -47,7 +47,7 @@ bool findBox() {
   return true;
 }
 
-void collectBox() {
+bool collectBox() {
 	adjSpeed(255);
 
   while(!digitalRead(R2)) {
@@ -65,16 +65,18 @@ void collectBox() {
   }
   hysteris_time = millis();
   stop();
-
+  bool gotBox = false;
   uint32_t t = millis();
   forward();
-  while(millis() - t < 2400) {
+  while(millis() - t < 2100) {
     if(getDistanceReading() == FLAT) {
       stop();
       pickUpBox();
+      gotBox = true;
       break;
     }
   }
   stop();
   backOutTillIntersection();
+  return gotBox;
 }

@@ -2,6 +2,7 @@
 #include "motor_control.h"
 
 bool is_moving = false;
+
 void forward() {  //forword
 	is_moving = true;
   leftMotor->run(BACKWARD);
